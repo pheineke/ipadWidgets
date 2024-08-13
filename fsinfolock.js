@@ -8,10 +8,9 @@ let json = false;
 async function getData() {
   const url = "https://www.fachschaft.informatik.uni-kl.de/opendoor.json";
   try {
-    var response = await fetch(url);
-    if (response.ok) {
-    json = await response.json();
-    }
+    var req = new Request(url);
+    var response = await req.loadJSON();
+    json = response;
   } catch (error) {
     console.error(error.message);
   }
@@ -50,4 +49,7 @@ async function updateWidget() {
 updateWidget();
 
 // Schedule widget update every 5 minutes
-Script.setInterval(updateWidget, 5 * 60);
+Timer.schedule({
+  interval: 5 * 60,
+  handler: updateWidget
+});
