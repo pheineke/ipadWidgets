@@ -19,10 +19,7 @@ async function getData() {
 
 
 getData();
-
-
-
-console.log(dateTime + " " + isOpen);
+d
 
 let widget = new ListWidget();
 
