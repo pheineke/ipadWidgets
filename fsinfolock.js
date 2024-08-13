@@ -21,7 +21,7 @@ async function updateWidget() {
 
   let widget = new ListWidget();
 
-  widget.backgroundColor = new Color("#1e1e1e");
+  widget.backgroundColor = json["opendoor"] ? new Color("#00ff00") : new Color("#ff0000");
 
   // Check if the door is open or closed
   let lockStatus = json["opendoor"] ? "🔓" : "🔒";
@@ -31,9 +31,6 @@ async function updateWidget() {
   lockText.font = Font.boldSystemFont(64);
   lockText.textColor = new Color("#ffffff");
   lockText.centerAlignText();
-
-  // Set widget background color based on lock status
-  widget.backgroundColor = json["opendoor"] ? new Color("#00ff00") : new Color("#ff0000");
 
   // Present the widget
   if (config.runsInWidget) {
