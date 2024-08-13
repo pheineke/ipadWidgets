@@ -1,26 +1,23 @@
-var today = new Date()
-var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
-var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
-var dateTime = date+' '+time
+let widget = createWidget();
+widget.presentMedium();
 
-let json = false;
+Script.setWidget(widget);
+Script.complete();
 
-async function getData() {
+function createWidget() {
+
   const url = "https://www.fachschaft.informatik.uni-kl.de/opendoor.json";
+  let json = false;
+
   try {
     var req = new Request(url);
-    var response = await req.loadJSON();
+    var response = req.loadJSON();
     json = response;
   } catch (error) {
     console.error(error.message);
   }
-}
-
-async function updateWidget() {
-  await getData();
 
   let widget = new ListWidget();
-
   widget.backgroundColor = json["opendoor"] ? new Color("#dddddd") : new Color("#000000");
   // Check if the door is open or closed
   let lockStatus = json["opendoor"] ? "🔓" : "🔒";
@@ -39,8 +36,9 @@ async function updateWidget() {
     // Display widget in the app
     widget.presentMedium();
   }
+
+  return widget;
 }
 
-// Initial update
-updateWidget();
+
 
