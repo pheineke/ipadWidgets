@@ -26,10 +26,6 @@ async function updateWidget() {
   // Check if the door is open or closed
   let lockStatus = json["opendoor"] ? "🔓 Open" : "🔒 Closed";
 
-  // Create an image element to display the lock
-  let lockImage = widget.addImage(await getImage(json["opendoor"]));
-  lockImage.centerAlignImage();
-
   // Create a text element to display the lock status
   let lockText = widget.addText(lockStatus);
   lockText.font = Font.boldSystemFont(24);
@@ -49,18 +45,11 @@ async function updateWidget() {
   }
 }
 
-async function getImage() {
-  let lockImageURL = json["opendoor"] ? "https://www.svgrepo.com/show/17481/lock.svg" : "https://www.svgrepo.com/show/136946/lock.svg";
-  let req = new Request(lockImageURL);
-  return await req.loadImage();
-}
-
-
 // Initial update
 updateWidget();
 
 // Schedule widget update every 5 minutes
-
-
-
-// ...
+Timer.schedule({
+  interval: 5 * 60,
+  handler: updateWidget
+});
