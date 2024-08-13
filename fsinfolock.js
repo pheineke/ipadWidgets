@@ -48,8 +48,3 @@ async function updateWidget() {
 // Initial update
 updateWidget();
 
-// Schedule widget update every 5 minutes
-Timer.schedule({
-  interval: 5 * 60,
-  handler: updateWidget
-});
