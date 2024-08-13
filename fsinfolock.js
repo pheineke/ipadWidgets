@@ -24,11 +24,11 @@ async function updateWidget() {
   widget.backgroundColor = new Color("#1e1e1e");
 
   // Check if the door is open or closed
-  let lockStatus = json["opendoor"] ? "🔓 Open" : "🔒 Closed";
+  let lockStatus = json["opendoor"] ? "🔓" : "🔒";
 
   // Create a text element to display the lock status
   let lockText = widget.addText(lockStatus);
-  lockText.font = Font.boldSystemFont(24);
+  lockText.font = Font.boldSystemFont(64);
   lockText.textColor = new Color("#ffffff");
   lockText.centerAlignText();
 
