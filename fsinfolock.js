@@ -22,7 +22,6 @@ async function updateWidget() {
   let widget = new ListWidget();
 
   widget.backgroundColor = json["opendoor"] ? new Color("#dddddd") : new Color("#000000");
-  000000
   // Check if the door is open or closed
   let lockStatus = json["opendoor"] ? "🔓" : "🔒";
 
