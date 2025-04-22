@@ -1,32 +1,11 @@
 // Door Status Widget for Scriptable
-// Shows whether the door is locked or unlocked with distinctive SVG icons
+// Shows whether the door is locked or unlocked with distinctive icons
 
 // Configuration
 const URL = "https://www.fachschaft.informatik.uni-kl.de/opendoor.json"
 const WIDGET_TITLE = "Door Status"
 const REFRESH_INTERVAL_SECONDS = 300 // Update every 5 minutes
 const DEBUG = false // Set to true for testing with random statuses
-
-// SVG Icons (simplified for better recognition on small screens)
-const DOOR_LOCKED_SVG = `
-<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <rect x="25" y="25" width="50" height="60" rx="5" fill="#e74c3c"/>
-  <rect x="35" y="10" width="30" height="40" rx="5" fill="#e74c3c"/>
-  <rect x="40" y="40" width="20" height="30" rx="2" fill="#fff"/>
-  <circle cx="50" cy="55" r="7" fill="#444"/>
-  <rect x="49" y="48" width="2" height="14" fill="#444"/>
-</svg>
-`
-
-const DOOR_UNLOCKED_SVG = `
-<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <rect x="25" y="25" width="50" height="60" rx="5" fill="#2ecc71"/>
-  <rect x="35" y="10" width="30" height="40" rx="5" fill="#2ecc71" transform="rotate(-30, 50, 30)"/>
-  <rect x="40" y="40" width="20" height="30" rx="2" fill="#fff"/>
-  <circle cx="50" cy="55" r="7" fill="#444"/>
-  <rect x="49" y="48" width="2" height="14" fill="#444"/>
-</svg>
-`
 
 // Function to fetch door status
 async function fetchDoorStatus() {
@@ -73,24 +52,28 @@ async function createWidget() {
   const isDoorOpen = await fetchDoorStatus()
   
   // Status text and icon based on door status
-  let statusText, svgString
+  let statusText, symbolName, symbolColor
   
   if (isDoorOpen === null) {
     // Error state
     statusText = "Unable to check"
-    svgString = DOOR_LOCKED_SVG // Default to locked when unknown
+    symbolName = "exclamationmark.lock.fill"
+    symbolColor = Color.yellow()
   } else if (isDoorOpen) {
     statusText = "Door is OPEN"
-    svgString = DOOR_UNLOCKED_SVG
+    symbolName = "lock.open.fill"
+    symbolColor = new Color("#2ecc71") // Green
   } else {
     statusText = "Door is LOCKED"
-    svgString = DOOR_LOCKED_SVG
+    symbolName = "lock.fill"
+    symbolColor = new Color("#e74c3c") // Red
   }
   
-  // Add SVG image
-  const svgImage = await createImage(svgString)
-  const imageWidget = widget.addImage(svgImage)
+  // Add SF Symbol image
+  const icon = SFSymbol.named(symbolName)
+  const imageWidget = widget.addImage(icon.image)
   imageWidget.imageSize = new Size(60, 60)
+  imageWidget.tintColor = symbolColor
   imageWidget.centerAlignImage()
   
   widget.addSpacer(5)
@@ -99,6 +82,7 @@ async function createWidget() {
   const status = widget.addText(statusText)
   status.font = Font.semiboldSystemFont(14)
   status.textColor = isDoorOpen ? new Color("#2ecc71") : new Color("#e74c3c")
+  if (isDoorOpen === null) status.textColor = Color.yellow()
   status.centerAlignText()
   
   widget.addSpacer(5)
@@ -115,13 +99,6 @@ async function createWidget() {
   updatedText.centerAlignText()
   
   return widget
-}
-
-// Helper function to create image from SVG
-async function createImage(svgString) {
-  const url = "data:image/svg+xml;base64," + Data.fromString(svgString).toBase64String()
-  const req = new Request(url)
-  return await req.loadImage()
 }
 
 // Main function
